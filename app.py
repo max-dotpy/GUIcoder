@@ -216,7 +216,7 @@ class App:
         text = Text(self.board, bg="red")
         text.place(relx=x, rely=y, relheight=height, relwidth=width, anchor="nw")
         self.board.delete("line")
-        items = [item for item in button.keys() if len(item) > 2]
+        items = [item for item in text.keys() if len(item) > 2]
 
         text.bind("<Enter>", lambda event: self.get_widget_info(text))
         text.bind("<Leave>", lambda event: self.focus_out())
