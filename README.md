@@ -2,4 +2,4 @@
 App to introduce beginners to Tkinter
 
 # How to use:
-Save all .py files in a directory and run App.py
+Save all .py files in a directory and run app.py
