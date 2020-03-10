@@ -48,6 +48,11 @@ class Writer:
             self.widgets[widget_name][-1] = self.widgets[widget_name][-1][:-2] + ")\n\n"
 
     def write_py(self):
+        for widget in self.widgets:
+            self.beginning += f"        self.{widget} = None\n"
+        self.beginning += "\n        self.set_layout()\n\n"\
+                          "    def set_layout(self):\n"
+
         self.beginning = self.beginning.format(self.app_background, self.app_geometry, self.app_transparency)
 
         end = "\n" \
