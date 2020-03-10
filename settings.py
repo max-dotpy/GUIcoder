@@ -388,86 +388,134 @@ class Settings_for_frame(Frame):
 
 
 class Settings_for_root(Frame):
-    def __init__(self, master, board, writer, background, dimensions):
+    def __init__(self, master, board, writer, background, dimensions, transparency):
         super().__init__(master, bg='#435661')
 
+        self.master = master
         self.board = board
         self.writer = writer
-        self.entry_background = None
-        self.spinbox_w = None
-        self.spinbox_h = None
-        self.spinbox_x = None
-        self.spinbox_y = None
-        self.set_layout(background, dimensions)
+        self.width = None
+        self.height = None
+        self.xoff = None
+        self.yoff = None
+        self.transparency = None
+        self.entry = None
+        self.current_dim = None
+        self.apply = None
+        self.confirm = None
 
-    def set_layout(self, background, dimensions):
+        self.set_layout(background, dimensions, transparency)
+
+    def set_layout(self, background, dimensions, transparency):
         w, h, x, y = dimensions
 
-        Label(self, background='#435661', foreground='#defffc', highlightbackground='White', text='width:') \
-            .place(relx=0.065, rely=0.0125, relwidth=0.375, relheight=0.02875, anchor='nw')
+        self.width = Spinbox(self, background='#defffc', foreground='#435661', from_=0, to_=10000,
+                             justify='center', highlightthickness=0, increment=1, command=self._apply)
+        self.width.place(relx=0.0725, rely=0.075, relwidth=0.3325, relheight=0.0325, anchor='nw')
 
-        Label(self, background='#435661', foreground='#defffc', text='height:') \
-            .place(relx=0.591, rely=0.012, relwidth=0.262, relheight=0.028, anchor='nw')
+        self.height = Spinbox(self, background='#defffc', foreground='#435661', from_=0, to_=10000,
+                              justify='center', highlightthickness=0, increment=1, command=self._apply)
+        self.height.place(relx=0.5825, rely=0.075, relwidth=0.3425, relheight=0.033, anchor='nw')
 
-        self.spinbox_w = Spinbox(self, background='#defffc', foreground='#435661', from_=0, to_=10000,
-                                 justify='center', highlightthickness=0, increment=1, command=self.apply)
-        self.spinbox_w.place(relx=0.115, rely=0.0525, relwidth=0.2875, relheight=0.04625, anchor='nw')
+        self.xoff = Spinbox(self, background='#defffc', foreground='#435661', from_=0, to_=10000,
+                            justify='center', highlightthickness=0, increment=1, command=self._apply)
+        self.xoff.place(relx=0.069, rely=0.186, relwidth=0.333, relheight=0.0325, anchor='nw')
 
-        self.spinbox_h = Spinbox(self, background='#defffc', foreground='#435661', from_=0, to_=10000,
-                                 justify='center', highlightthickness=0, increment=1, command=self.apply)
-        self.spinbox_h.place(relx=0.595, rely=0.053, relwidth=0.279, relheight=0.046, anchor='nw')
+        self.yoff = Spinbox(self, background='#defffc', foreground='#435661', from_=0, to_=10000,
+                            justify='center', highlightthickness=0, increment=1, command=self._apply)
+        self.yoff.place(relx=0.582, rely=0.186, relwidth=0.343, relheight=0.033, anchor='nw')
 
-        Label(self, background='#435661', foreground='#defffc', highlightbackground='White',
-              text="x offset:                                         y offset:") \
-            .place(relx=0.067, rely=0.16, relwidth=0.835, relheight=0.03375, anchor='nw')
+        Label(self, background='#435661', foreground='#defffc', text='width') \
+            .place(relx=0.103, rely=0.048, relwidth=0.27, relheight=0.0275, anchor='nw')
 
-        self.spinbox_x = Spinbox(self, background='#defffc', foreground='#435661', from_=0, to_=10000,
-                                 justify='center', highlightthickness=0, increment=1, command=self.apply)
-        self.spinbox_x.place(relx=0.1175, rely=0.2062, relwidth=0.279, relheight=0.048, anchor='nw')
+        Label(self, background='#435661', foreground='#defffc', text='height') \
+            .place(relx=0.63, rely=0.05, relwidth=0.25, relheight=0.025, anchor='nw')
 
-        self.spinbox_y = Spinbox(self, background='#defffc', foreground='#435661', from_=0, to_=10000,
-                                 justify='center', highlightthickness=0, increment=1, command=self.apply)
-        self.spinbox_y.place(relx=0.593, rely=0.206, relwidth=0.2775, relheight=0.048, anchor='nw')
+        Label(self, background='#435661', foreground='#defffc', text='x offset') \
+            .place(relx=0.135, rely=0.161, relwidth=0.2025, relheight=0.025, anchor='nw')
 
-        Label(self, background='#435661', foreground='#defffc', text='background:') \
-            .place(relx=0.293, rely=0.3287, relwidth=0.405, relheight=0.0475, anchor='nw')
+        Label(self, background='#435661', foreground='#defffc', text='y offset') \
+            .place(relx=0.635, rely=0.16, relwidth=0.23, relheight=0.02625, anchor='nw')
 
-        self.entry_background = Entry(self, background='#defffc', foreground='#435661', justify="center")
-        self.entry_background.place(relx=0.29, rely=0.3837, relwidth=0.405, relheight=0.043, anchor='nw')
+        self.current_dim = myButton(self, text="Set current root's dimensions",
+                                    command=lambda *args:self.set_current())
+        self.current_dim.place(relx=0.175, rely=0.2537, relwidth=0.65, relheight=0.035, anchor='nw')
 
-        myButton(self, text='APPLY', command=self.apply) \
-            .place(relx=0.217, rely=0.5475, relwidth=0.549, relheight=0.06375, anchor='nw')
+        self.transparency = Spinbox(self, background='#defffc', foreground='#435661', from_=0, to_=1,
+                                    justify='center', highlightthickness=0, increment=0.01, command=self._apply)
+        self.transparency.place(relx=0.3, rely=0.36, relwidth=0.4, relheight=0.03375, anchor='nw')
 
-        myButton(self, text='CONFIRM', command=self.confirm) \
-            .place(relx=0.305, rely=0.8, relwidth=0.385, relheight=0.08875, anchor='nw')
+        Label(self, background='#435661', foreground='#defffc', text='transparency') \
+            .place(relx=0.324, rely=0.335, relwidth=0.34, relheight=0.025, anchor='nw')
 
-        self.spinbox_w.delete(0, "end")
-        self.spinbox_h.delete(0, "end")
-        self.spinbox_x.delete(0, "end")
-        self.spinbox_y.delete(0, "end")
-        self.spinbox_w.insert("end", w)
-        self.spinbox_h.insert("end", h)
-        self.spinbox_x.insert("end", x)
-        self.spinbox_y.insert("end", y)
+        self.entry = Entry(self, borderwidth=0, background='#557282', foreground='#defffc',
+                           highlightthickness=0, justify="center")
+        self.entry.place(relx=0.3, rely=0.4725, relwidth=0.4, relheight=0.04625, anchor='nw')
 
-        self.entry_background.insert("end", background)
+        Label(self, background='#435661', foreground='#defffc', text='background') \
+            .place(relx=0.375, rely=0.449, relwidth=0.2525, relheight=0.02375, anchor='nw')
 
-    def apply(self):
-        self.board.configure(bg=self.entry_background.get())
+        self.apply = myButton(self, text="Apply", command=lambda *args: self._apply())
+        self.apply.place(relx=0.23, rely=0.6075, relwidth=0.54, relheight=0.05125, anchor='nw')
 
-        w = self.spinbox_w.get()
-        h = self.spinbox_h.get()
-        x = self.spinbox_x.get()
-        y = self.spinbox_y.get()
+        self.confirm = myButton(self, text="CONFIRM", command=lambda *args: self._confirm())
+        self.confirm.place(relx=0.23, rely=0.7762, relwidth=0.54, relheight=0.09125, anchor='nw')
+
+        self.width.delete(0, "end")
+        self.height.delete(0, "end")
+        self.xoff.delete(0, "end")
+        self.yoff.delete(0, "end")
+        self.width.insert("end", w)
+        self.height.insert("end", h)
+        self.xoff.insert("end", x)
+        self.yoff.insert("end", y)
+
+        self.transparency.delete(0, "end")
+        self.transparency.insert("end", transparency)
+
+        self.width.bind("<Return>", lambda *args: self._apply())
+        self.height.bind("<Return>", lambda *args: self._apply())
+        self.xoff.bind("<Return>", lambda *args: self._apply())
+        self.yoff.bind("<Return>", lambda *args: self._apply())
+        self.transparency.bind("<Return>", lambda *args: self._apply())
+
+        self.entry.insert("end", background)
+
+    def set_current(self):
+        w, h = self.board.winfo_width(), self.board.winfo_height()
+        x, y = self.board.master.winfo_x(), self.board.master.winfo_y()
+
+        self.width.delete(0, "end")
+        self.height.delete(0, "end")
+        self.xoff.delete(0, "end")
+        self.yoff.delete(0, "end")
+        self.width.insert("end", w)
+        self.height.insert("end", h)
+        self.xoff.insert("end", x)
+        self.yoff.insert("end", y)
+
+    def _apply(self):
+        self.board.configure(bg=self.entry.get())
+
+        w = self.width.get()
+        h = self.height.get()
+        x = self.xoff.get()
+        y = self.yoff.get()
         self.board.master.geometry(f"{w}x{h}+{x}+{y}")
 
-    def confirm(self):
-        self.board.configure(bg=self.entry_background.get())
-        self.writer.app_background = self.entry_background.get()
-        w = self.spinbox_w.get()
-        h = self.spinbox_h.get()
-        x = self.spinbox_x.get()
-        y = self.spinbox_y.get()
+        self.board.master.attributes("-alpha", self.transparency.get())
+
+    def _confirm(self):
+        self.board.configure(bg=self.entry.get())
+        self.writer.app_background = self.entry.get()
+
+        w = self.width.get()
+        h = self.height.get()
+        x = self.xoff.get()
+        y = self.yoff.get()
         self.board.master.geometry(f"{w}x{h}+{x}+{y}")
+
         self.writer.app_geometry = f"{w}x{h}+{x}+{y}"
+        self.writer.app_transparency = self.transparency.get()
+
         self.destroy()

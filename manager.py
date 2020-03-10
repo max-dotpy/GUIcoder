@@ -33,6 +33,7 @@ class Manager(Toplevel):
     def set_root(self, board):
         str_dimensions = self.writer.app_geometry.replace("+", " ").replace("x", " ").split()
         dimensions = [int(dim) for dim in str_dimensions]
-        settings = Settings_for_root(self, board, self.writer, self.writer.app_background, dimensions)
+        settings = Settings_for_root(self, board, self.writer, self.writer.app_background,
+                                     dimensions, self.writer.app_transparency)
         settings.place(relx=0, rely=0, relwidth=1, relheight=1)
         self.wait_window(settings)

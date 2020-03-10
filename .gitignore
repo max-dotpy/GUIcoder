@@ -1,3 +1,8 @@
 .idea/
 __pycache__/
 venv
+inutility
+.git
+.DS_Store
+.gitignore
+Prototype.py

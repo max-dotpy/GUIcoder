@@ -2,24 +2,26 @@ class Writer:
     def __init__(self):
         self.app_background = "white"
         self.app_geometry = "1000x800+700+100"
+        self.app_transparency = 1
         self.record = {}
         self.beginning = "from tkinter import *\n"\
                          "from tkinter.ttk import Button as TButton\n"\
                          "from tkinter.ttk import Combobox as TCombobox\n\n\n"\
                          "class App(Frame):\n"\
-                         "\tdef __init__(self, master):\n"\
-                         "\t\tsuper().__init__(master, bg='{}')\n"\
-                         "\t\tmaster.geometry('{}')\n\n"
+                         "    def __init__(self, master):\n"\
+                         "        super().__init__(master, bg='{}')\n"\
+                         "        master.geometry('{}')\n"\
+                         "        master.attributes('-alpha', {})\n\n"
 
         self.widgets = {}
 
     def define_widget(self, widget_name, widget_cls, place_info, modifying=False):
-        text = f"\t\tself.{widget_name} = {widget_cls}(self)\n" \
-               f"\t\tself.{widget_name}.place("
+        text = f"        self.{widget_name} = {widget_cls}(self)\n" \
+               f"        self.{widget_name}.place("
 
         if widget_cls == "Button":
-            text = f"\t\tself.{widget_name} = ttk.{widget_cls}(self)" \
-                   f"\n\t\tself.{widget_name}.place("
+            text = f"        self.{widget_name} = ttk.{widget_cls}(self)" \
+                   f"\n        self.{widget_name}.place("
 
         for key, value in place_info.items():
             if key in ["relx", "rely", "relwidth", "relheight"]:
@@ -34,25 +36,25 @@ class Writer:
             self.widgets[widget_name] = [text[:-2] + ")\n"]
 
     def begin_configure(self, widget_name):
-        self.widgets[widget_name].append(f"\t\tself.{widget_name}.configure(")
+        self.widgets[widget_name].append(f"        self.{widget_name}.configure(")
 
     def write_configure(self, widget_name, key, value):
         self.widgets[widget_name].append(f"{key}={value}, ")
 
-    def end_configure(self, widget_name):  # Non dovrei trovare .configure vuoti.. risolvi e poi cancella l'if
-        if self.widgets[widget_name][-1][-2:] == f"\t\tself.{widget_name}.configure(":
+    def end_configure(self, widget_name):
+        if self.widgets[widget_name][-1][-2:] == f"        self.{widget_name}.configure(":
             self.widgets[widget_name][-1] = "\n\n"
         else:
             self.widgets[widget_name][-1] = self.widgets[widget_name][-1][:-2] + ")\n\n"
 
     def write_py(self):
-        self.beginning = self.beginning.format(self.app_background, self.app_geometry)
+        self.beginning = self.beginning.format(self.app_background, self.app_geometry, self.app_transparency)
 
         end = "\n" \
               "if __name__ == '__main__':\n" \
-              "\troot = Tk()\n\n" \
-              "\tApp(root).place(relx=0, rely=0, relwidth=1, relheight=1)\n\n" \
-              "\troot.mainloop()\n\n"
+              "    root = Tk()\n\n" \
+              "    App(root).place(relx=0, rely=0, relwidth=1, relheight=1)\n\n" \
+              "    root.mainloop()\n\n"
 
         text = self.beginning
 
