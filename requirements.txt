@@ -1,0 +1,2 @@
+pyperclip>=1.7.0
+Pillow>=6.2.1

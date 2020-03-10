@@ -1,5 +1,4 @@
 from tkinter import Toplevel
-from myTkinter import myButton
 from selector import Selector
 from settings import Settings, Settings_for_frame, Settings_for_root
 

@@ -4,7 +4,6 @@ class Writer:
         self.app_geometry = "1000x800+700+100"
         self.record = {}
         self.beginning = "from tkinter import *\n"\
-                         "from tkinter import ttk\n"\
                          "from tkinter.ttk import Button as TButton\n"\
                          "from tkinter.ttk import Combobox as TCombobox\n\n\n"\
                          "class App(Frame):\n"\

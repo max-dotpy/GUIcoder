@@ -1,4 +1,4 @@
-from tkinter import Label, Entry, Radiobutton, Checkbutton, Spinbox, Listbox, Text
+from tkinter import Toplevel, Label, Entry, Radiobutton, Checkbutton, Spinbox, Listbox, Text
 from tkinter import ttk
 from board import Board
 from manager import Manager
@@ -15,7 +15,8 @@ class App:
         root.geometry(f"{w}x800+{w // 4 * 3}+100")
         root.title("")
 
-        Palette(root)
+        top = Toplevel(root)
+        Palette(top).place(relx=0, rely=0, relheight=1, relwidth=1)
 
         self.board = Board(root, height=800, width=w)
         self.board.pack(fill="both", expand=True)
