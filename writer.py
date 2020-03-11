@@ -42,7 +42,7 @@ class Writer:
         self.widgets[widget_name].append(f"{key}={value}, ")
 
     def end_configure(self, widget_name):
-        if self.widgets[widget_name][-1][-2:] == f"        self.{widget_name}.configure(":
+        if self.widgets[widget_name][-1] == f"        self.{widget_name}.configure(":
             self.widgets[widget_name][-1] = "\n\n"
         else:
             self.widgets[widget_name][-1] = self.widgets[widget_name][-1][:-2] + ")\n\n"
