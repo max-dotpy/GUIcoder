@@ -10,6 +10,7 @@ class Settings(Frame):
         self.modifying = modifying
         self.record = {}
         self.index = 0
+        self.standard_params = []
         self.spin_relx = None
         self.spin_rely = None
         self.spin_relw = None
@@ -147,7 +148,9 @@ class Settings(Frame):
     def set_listbox(self, items):
         for item in items:
             self.listbox.insert("end", item)
-            self.record[item] = self.widget.cget(item)
+            parameter = self.widget.cget(item)
+            self.record[item] = parameter
+            self.standard_params.append(parameter)
 
     def listbox_clicked(self):
         # Changes entry_arguments's text and label_arguments's text, sets focus on entry_name
@@ -186,8 +189,8 @@ class Settings(Frame):
 
                 self.master.writer.define_widget(name, widget_cls, self.widget.place_info())
                 self.master.writer.begin_configure(name)
-                for key, value in self.record.items():
-                    if value:
+                for j, (key, value) in enumerate(self.record.items()):
+                    if value != self.standard_params[j]:
                         self.master.writer.write_configure(name, key, f"'{value}'")
                 self.master.writer.end_configure(name)
 
@@ -208,8 +211,8 @@ class Settings(Frame):
                 self.entry_name.insert("end", "NOME SBAGLIATO")
                 return None
 
-            for key, value in self.record.items():
-                if value:
+            for j, (key, value) in enumerate(self.record.items()):
+                if value != self.standard_params[j]:
                     self.master.writer.write_configure(name, key, f"'{value}'")
             self.master.writer.end_configure(name)
 
