@@ -7,6 +7,7 @@ class Settings(Frame):
         super().__init__(master, bg="#435661")
 
         self.widget = widget
+        self.id = id(widget)
         self.modifying = modifying
         self.record = {}
         self.index = 0
@@ -77,6 +78,9 @@ class Settings(Frame):
         self.entry_name.place(relx=0.245, rely=0.7662, relwidth=0.5225, relheight=0.035, anchor='nw')
 
         self.entry_name.bind("<Return>", lambda *a: self.confirm())
+
+        if self.modifying:
+            self.entry_name.insert("end", self.master.record_of_ids[self.id])
 
         myButton(self, command=lambda *a: self.confirm(), text='CONFIRM') \
             .place(relx=0.201, rely=0.8575, relwidth=0.6155, relheight=0.0825, anchor='nw')
@@ -151,6 +155,10 @@ class Settings(Frame):
             parameter = self.widget.cget(item)
             self.record[item] = parameter
             self.standard_params.append(parameter)
+        if self.modifying:
+            self.standard_params = self.master.writer.standard_params[self.widget]
+        else:
+            self.master.writer.standard_params[self.widget] = self.standard_params
 
     def listbox_clicked(self):
         # Changes entry_arguments's text and label_arguments's text, sets focus on entry_name
@@ -185,6 +193,7 @@ class Settings(Frame):
         if not self.modifying:
             if name and name not in self.master.record_of_names:
                 self.master.record_of_names[name] = self.widget
+                self.master.record_of_ids[self.id] = name
                 widget_cls = self.widget.winfo_class()
 
                 self.master.writer.define_widget(name, widget_cls, self.widget.place_info())
@@ -203,13 +212,8 @@ class Settings(Frame):
         else:
             widget_cls = self.widget.winfo_class()
 
-            try:
-                self.master.writer.define_widget(name, widget_cls, self.widget.place_info(), True)
-                self.master.writer.begin_configure(name)
-            except KeyError:
-                self.entry_name.delete(0, "end")
-                self.entry_name.insert("end", "NOME SBAGLIATO")
-                return None
+            self.master.writer.define_widget(name, widget_cls, self.widget.place_info(), True)
+            self.master.writer.begin_configure(name)
 
             for j, (key, value) in enumerate(self.record.items()):
                 if value != self.standard_params[j]:

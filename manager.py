@@ -12,6 +12,7 @@ class Manager(Toplevel):
         self.writer = writer
         self.root = root
         self.record_of_names = {}
+        self.record_of_ids = {}
         self.selector = Selector(self, bg=self["bg"])
         self.fake_frame_background = "white"
         self.fake_frame_place_info = {}

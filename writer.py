@@ -4,6 +4,7 @@ class Writer:
         self.app_geometry = "1000x800+700+100"
         self.app_transparency = 1
         self.record = {}
+        self.standard_params = {}
         self.beginning = "from tkinter import *\n"\
                          "from tkinter.ttk import Button as TButton\n"\
                          "from tkinter.ttk import Combobox as TCombobox\n\n\n"\
