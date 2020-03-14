@@ -27,8 +27,6 @@ class Writer:
         for key, value in place_info.items():
             if key in ["relx", "rely", "relwidth", "relheight"]:
                 text += f"{key}={value}, "
-            if key == "anchor":
-                text += f"{key}='{value}', "
 
         if modifying:
             self.widgets[widget_name][0] = text[:-2] + ")\n"
