@@ -1,6 +1,6 @@
 from tkinter import Toplevel, Frame
-from myTkinter import myButton
-from selector import ColorSelector
+from GUIcoder.myTkinter import myButton
+from GUIcoder.selector import ColorSelector
 from pyperclip import copy
 
 

@@ -1,9 +1,9 @@
-from tkinter import Toplevel, Label, Entry, Radiobutton, Checkbutton, Spinbox, Listbox, Text
+from tkinter import Toplevel, Label, Entry, Radiobutton, Checkbutton, Spinbox, Listbox, Text, Tk
 from tkinter import ttk
-from board import Board
-from manager import Manager
-from writer import Writer
-from palette import Palette
+from GUIcoder.board import Board
+from GUIcoder.manager import Manager
+from GUIcoder.writer import Writer
+from GUIcoder.palette import Palette
 from time import time
 
 
@@ -259,8 +259,6 @@ class App:
 
 
 if __name__ == '__main__':
-    from tkinter import Tk
-
     root = Tk()
 
     App(root)

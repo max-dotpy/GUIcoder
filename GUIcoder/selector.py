@@ -1,5 +1,5 @@
 from tkinter import Frame, Label, Entry, Canvas
-from myTkinter import myButton
+from GUIcoder.myTkinter import myButton
 from PIL import Image, ImageTk
 
 

@@ -1,6 +1,6 @@
 from tkinter import Toplevel
-from selector import Selector
-from settings import Settings, Settings_for_frame, Settings_for_root
+from GUIcoder.selector import Selector
+from GUIcoder.settings import Settings, Settings_for_frame, Settings_for_root
 
 
 # Toplevel, Frame, Setting, Selector

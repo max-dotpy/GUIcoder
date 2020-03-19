@@ -6,3 +6,5 @@ inutility
 .DS_Store
 .gitignore
 Prototype.py
+simple_demonstration.mov
+__pycache__

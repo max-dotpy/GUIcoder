@@ -1,5 +1,5 @@
 from tkinter import Frame, Label, Spinbox, Listbox, Entry
-from myTkinter import myButton
+from GUIcoder.myTkinter import myButton
 
 
 class Settings(Frame):
