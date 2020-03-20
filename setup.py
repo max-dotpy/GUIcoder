@@ -29,7 +29,7 @@ setup(
   ],
   entry_points={
         'console_scripts': [
-            'GUICoder= GUICoder.app:main',
+            'GUIcoder= GUIcoder.app:main',
         ],
   },
 )
