@@ -10,7 +10,7 @@ setup(
   author = 'Massimo Cosimo',
   author_email = 'pythonmax@hotmail.com',
   url = 'https://github.com/max-dotpy/GUI_maker',
-  download_url = 'https://github.com/max-dotpy/GUI_maker/archive/v_01.tar.gz',    # I explain this later on
+  download_url = 'https://github.com/max-dotpy/GUI_maker/archive/v0.1.tar.gz',    # I explain this later on
   keywords = ['tkinter', 'GUI', 'Visual', 'builder', 'beginners-friendly'],
   install_requires=[
           'Pillow',
@@ -27,4 +27,9 @@ setup(
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
   ],
+  entry_points={
+        'console_scripts': [
+            'GUICoder= GUICoder.app:main',
+        ],
+  },
 )

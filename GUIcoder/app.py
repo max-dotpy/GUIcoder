@@ -258,9 +258,13 @@ class App:
         self.manager.bind("<<FRAME>>", lambda *args: self.create_frame())
 
 
-if __name__ == '__main__':
+def main():
     root = Tk()
 
     App(root)
 
     root.mainloop()
+
+    
+if __name__ == '__main__':
+    main()
