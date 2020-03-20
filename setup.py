@@ -4,7 +4,7 @@ from distutils.core import setup
 setup(
   name = 'GUIcoder',
   packages = ['GUIcoder'],
-  version = '0.1',
+  version = '0.15',
   license='MIT',
   description = 'Visual GUI code builder',
   author = 'Massimo Cosimo',
